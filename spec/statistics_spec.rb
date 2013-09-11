@@ -44,5 +44,19 @@ class StatisticsSpec
         @statistics.team_slugging_percentage.should == "18.128 %"
       end
     end
+    
+    describe ".top_five_improved_fantasy_players_year_to_year" do
+      before :each do
+        @top_five = @statistics.top_five_improved_fantasy_players_year_to_year(2011, 2012)
+      end
+      
+      it "should return 5 records" do
+        @top_five.count.should == 5
+      end
+      
+      it "should return Alexis Rios as the most improved." do
+        @top_five.first.strip.should == "Alexis Rios improved by 107 points"
+      end
+    end
   end
 end

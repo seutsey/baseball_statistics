@@ -54,6 +54,42 @@ class Statistics
     a = at_bats.reduce(0) { |t, v| v ? t += v : t}
     Calculations.calculate_slugging_percentage h, d, tr, h, a
   end
+  
+  def top_five_improved_fantasy_players_year_to_year(year_one, year_two)
+    year_one_scores = get_fantasy_scores_for_year year_one
+    year_two_scores = get_fantasy_scores_for_year year_two
+    
+    player_score_difference = Array.new
+    
+    year_one_scores.each do |yo|
+      year_two_scores.each do |yt|
+        if yo[:playerID] == yt[:playerID]
+          score_difference = Calculations.calculate_fantasy_score_difference(yo[:fantasy_score].to_f, yt[:fantasy_score].to_f)
+          player_score_difference.push({playerID: yo[:playerID], score_difference: score_difference})
+          break
+        end
+      end
+    end
+    player_out = Array.new
+    players = Players.new
+    
+    player_score_difference.sort_by { |x| x[:score_difference] }.reverse.take(5).each do |p|
+      player_out.push("     #{ players.player_name_by_id(p[:playerID]) } improved by #{ p[:score_difference].to_i } points")
+    end
+    player_out
+  end
+  
+  def get_fantasy_scores_for_year(year)
+    scores_for_year = Array.new
+    
+    @batting_statistics.each do |b|
+      if b[:yearID].to_i == year.to_i and b[:AB].to_i >= 500
+        scores_for_year.push(Calculations.calculate_fantasy_score(b[:playerID], b[:yearID], b[:HR], b[:RBI], b[:SB], b[:CS]))
+      end
+    end
+    
+    scores_for_year
+  end
 end
 
 

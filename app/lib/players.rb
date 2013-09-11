@@ -19,4 +19,9 @@ class Players
     end
     player
   end
+  
+  def player_name_by_id(id)
+    player = player_by_id id
+    "#{ player[:nameFirst] } #{ player[:nameLast] }"
+  end
 end

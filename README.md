@@ -10,3 +10,14 @@ Run bundle install
 Execute Application
 ===================
 ruby baseball.rb
+
+
+Testing
+=======
+
+Tests are written in rspec (gem install rspec).
+
+From the project root:
+$ rspec
+
+This will run all of the tests.

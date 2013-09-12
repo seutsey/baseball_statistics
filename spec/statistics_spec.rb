@@ -58,5 +58,15 @@ class StatisticsSpec
         @top_five.first.strip.should == "Alexis Rios improved by 107 points"
       end
     end
+    
+    describe ".triple_crown_winner_for_year" do
+      it "should return Miguel Cabrera for 2012" do
+        @statistics.triple_crown_winner_for_year(2012).should == "Miguel Cabrera"
+      end
+      
+      it "should return (No Winner) if there was no winner" do
+        @statistics.triple_crown_winner_for_year(2011).should == "(No Winner)"
+      end
+    end
   end
 end

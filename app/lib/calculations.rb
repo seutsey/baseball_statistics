@@ -3,7 +3,7 @@ require_relative "fantasy_scoring"
 
 class Calculations
   def self.calculate_batting_average(hits, at_bats)
-    hits.to_f / at_bats.to_f
+    (hits.to_f / at_bats.to_f).round(3)
   end
   
   def self.calculate_slugging_percentage(hits, doubles, triples, home_runs, at_bats)

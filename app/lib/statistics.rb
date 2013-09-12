@@ -79,6 +79,45 @@ class Statistics
     player_out
   end
   
+  def triple_crown_winner_for_year(year)
+    hr_id = player_with_most_home_runs_for_year(year)
+    rbi_id = player_with_most_rbis_for_year(year)
+    ba_id = player_with_highest_batting_average_for_year(year)
+    
+    if hr_id == rbi_id and hr_id == ba_id
+      player = Players.new
+      "#{ player.player_name_by_id hr_id }"
+    else
+      "(No Winner)"
+    end
+  end
+  
+  def player_with_most_home_runs_for_year(year)
+    get_stats_by_year(year).sort_by { |x| x[:HR].to_i }.reverse.take(1)[0][:playerID]
+  end
+  
+  def player_with_most_rbis_for_year(year)
+    get_stats_by_year(year).sort_by { |x| x[:RBI].to_i }.reverse.take(1)[0][:playerID]
+  end
+  
+  def player_with_highest_batting_average_for_year(year)
+    year_stats = get_stats_by_year(year)
+    player_ba_stats = Array.new  
+    
+    year_stats.each do |ys|
+      ba = Calculations.calculate_batting_average(ys[:H].to_f, ys[:AB].to_f)
+      if !ba.to_f.nan?
+        player_ba_stats.push( { playerID: ys[:playerID], batting_average: ba } )
+      end
+    end
+    
+    player_ba_stats.sort_by { |x| x[:batting_average].to_f }.reverse.take(1)[0][:playerID]
+  end
+  
+  def get_stats_by_year(year)
+    @batting_statistics.select { |y| y[:yearID].to_i == year.to_i and y[:AB].to_i >= 600 }
+  end
+  
   def get_fantasy_scores_for_year(year)
     scores_for_year = Array.new
     
